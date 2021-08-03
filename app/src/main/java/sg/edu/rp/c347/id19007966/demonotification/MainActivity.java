@@ -63,5 +63,44 @@ public class MainActivity extends AppCompatActivity {
             notificationManager.notify(notificationID, notification);
             finish();
         });
+
+        buttonNotify2.setOnClickListener(view -> {
+            NotificationManager notificationManager = (NotificationManager)
+                    getSystemService(NOTIFICATION_SERVICE);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel("default", "Default Channel", NotificationManager.IMPORTANCE_DEFAULT);
+
+                channel.setDescription("This is for default notification");
+                notificationManager.createNotificationChannel(channel);
+            }
+
+            Intent intent = new Intent(MainActivity.this,MainActivity.class);
+            PendingIntent pIntent = PendingIntent.getActivity
+                    (MainActivity.this, requestCode,
+                            intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+            NotificationCompat.BigTextStyle bigText = new
+                    NotificationCompat.BigTextStyle();
+            bigText.setBigContentTitle("Big Text – Long Content");
+            bigText.bigText("This is one big text" +
+                    " - A quick brown fox jumps over a lazy brown dog "+
+                    "\nLorem ipsum dolor sit amet, sea eu quod des");
+            bigText.setSummaryText("Reflection Journal?");
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this, "default");
+
+            builder.setContentTitle("Amazing Offer!");
+            builder.setContentText("Subject");
+            builder.setSmallIcon(android.R.drawable.btn_star_big_off);
+            builder.setContentIntent(pIntent);
+            builder.setStyle(bigText);
+            builder.setAutoCancel(true);
+
+            Notification notification = builder.build();
+            notificationManager.notify(notificationID, notification);
+
+            finish();
+        });
     }
 }
