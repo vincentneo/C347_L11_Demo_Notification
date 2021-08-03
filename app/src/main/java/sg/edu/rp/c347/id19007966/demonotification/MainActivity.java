@@ -8,6 +8,9 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
@@ -30,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 NotificationChannel channel = new
                         NotificationChannel("default", "Default Channel",
-                        NotificationManager.IMPORTANCE_DEFAULT);
+                        NotificationManager.IMPORTANCE_HIGH);
 
                 channel.setDescription("This is for default notification");
                 notificationManager.createNotificationChannel(channel);
@@ -48,6 +51,12 @@ public class MainActivity extends AppCompatActivity {
             builder.setSmallIcon(android.R.drawable.btn_star_big_off);
             builder.setContentIntent(pIntent);
             builder.setAutoCancel(true);
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                builder.setSound(uri);
+                builder.setPriority(Notification.PRIORITY_HIGH);
+            }
 
             Notification notification = builder.build();
 
